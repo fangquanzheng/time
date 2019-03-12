@@ -1,7 +1,7 @@
 
-var dataCSV = d3.csv("../data.csv");
+var grades = d3.csv("gradedatatime.json");
 
-dataCSV.then(function(data)
+grades.then(function(data)
 {
   console.log("data",data);
   drawChart(data, "svg");
