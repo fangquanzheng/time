@@ -60,4 +60,4 @@ var svg = d3.select("body")
 					})
 					.attr("text-anchor","middle")
 					.style("font-size",15)
-};
+}
