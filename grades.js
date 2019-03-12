@@ -30,10 +30,10 @@ var drawChart = function(data,){
               return i * barWidth + 10;
             })
             .attr("y", function(d){
-              return height - d.gini;
+              return height - d.grade;
             })
             .attr("height", function(d){
-              return d.gini;
+              return d.grade;
             })
             .attr("width", barWidth)
             .attr("fill", "green");
@@ -43,7 +43,7 @@ var drawChart = function(data,){
     .enter()
     .append("text")
     .text(function(d){
-      return d.Country;
+      return d.name;
     })
     .attr("x", function(d, i){
       return i * barWidth + 17;
@@ -59,13 +59,13 @@ var drawChart = function(data,){
     .enter()
     .append("text")
     .text(function(d){
-      return d.gini;
+      return d.grade;
     })
     .attr("x", function(d, i){
       return i * barWidth + 17;
     })
     .attr("y", function(d){
-      return height - d.gini + 30;
+      return height - d.grade + 30;
     })
     .attr("font-size", "12px")
     .attr("fill", "white");
