@@ -1,5 +1,5 @@
 
-var datajson = d3.csv("gradedatatime.json");
+var datajson = d3.json("gradedatatime.json");
 
 datajson.then(function(data)
 {
