@@ -12,11 +12,15 @@ var width = 500;
 var chartW = 300
 var height = 250;
 var barpadding = 5;
-var barwidth=(chartW/7) - barpadding;
-var legendW=15;
-var legendH=15;
-var legendpadding=5;
-
+var barwidth = (chartW/7) - barpadding;
+var legendW = 15;
+var legendH = 15;
+var legendpadding = 5;
+var drawChart = function(data){
+var svg = d3.select("body")
+		.selectAll("svg")
+		.attr("width",width)
+		.attr("height",height);
 var svg = d3.select("body")
 				.selectAll("svg")
 				.attr("width",width)
@@ -56,3 +60,4 @@ var svg = d3.select("body")
 					})
 					.attr("text-anchor","middle")
 					.style("font-size",15)
+});
