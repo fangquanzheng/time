@@ -49,7 +49,7 @@ var drawChart = function(data,){
       return i * barWidth + 17;
     })
     .attr("y", function(d){
-      return height - d.gini + 15;
+      return height - d.grade + 15;
     })
     .attr("font-size", "12px")
     .attr("fill", "white");
