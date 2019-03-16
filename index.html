@@ -1,129 +1,158 @@
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Looking Through Time</title>
-<script src = "http://d3js.org/d3.v5.min.js"></script>
-<style>
-	body{
-			font: 10px sans-serif;
-		}
-	svg{
-			display: block;
-			margin-left: 10%;
-			margin-bottom: 50px
-		}
-</style>
-	</head>
-	<body>
-	<script type="text/javascript">
-	 var width = 500;
-	 var chartW = 300;
-	 var height = 250;
-	 var padding = 5;
-	 var barwidth = (chartW/7) - padding;
-	 var legendW = 15;
-	 var legendH = 15;
-	 var legendpadding = 5;
-	 var xScale = d3.scaleLinear()
-							 .domain([0,4])
-							 .range([0,width-150])
-	var yScale=d3.scaleLinear()
-							 .domain([0,100])
-							 .range([0,height]); 
-	var color = d3.scaleOrdinal(d3.schemeCategory10);
+   <head>
+      <meta charset="UTF-8">
+      <title>Looking Through Time</title>
+      <script src = "http://d3js.org/d3.v5.min.js"></script>
+      <style>
+         body{
+         font-size: 20px sans-serif;
+         }
+         svg{
+         display: block;
+         margin-left: 10%;
+         margin-bottom: 50px
+         }
+      </style>
+      <link rel="shortcut icon" href="">
+   </head>
+   <body>
+      <script type="text/javascript">
+         var margin={
+         top:20,
+         bottom:20,
+         left:30,
+         right:80
+         }
+          var maxDay=10;
+           var width = 500;
+           var height = 250;
+           var graphwidth=width-margin.left-margin.right;
+           var graphheight=height-margin.top-margin.bottom;
+           var xScale = d3.scaleLinear()
+                 .domain([0,4])
+                 .range([0,graphwidth]);
+           var yScale2=d3.scaleLinear()
+                .domain([0,100])
+                .range([graphheight,0]);
+           var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-	 var dataP = d3.json("gradedatatime.json");
-	 var drawChart = function(data,day){
-	 var svg = d3.select("svg")
-			     .attr("width",width)
-			     .attr("height",height);
-		// rects
-	var rect = svg.selectAll("rect")
-			.data(data[day].grades)
-			.enter()
-			.append("rect")
-			.attr("x",function(d,i){
-			  return xScale*(i);
-			})
-			.attr("y",function(d){
-			  return height- yScale(d.grade);
-			})
-			.attr("width",barwidth)
-			.attr("height",function(d){
-			  return yScale(d.grade);
-			})
-			.attr("fill",function(d){
-			  return color(d.name);
-			})
-			 
-			svg.append("g")
-					.selectAll("text")
-					.data(data[day].grades)
-					.enter()
-					.append("text")
-					.attr("x",520)
-					.attr("y",function(d,i){
-						return i*35+130;})
-					.text(function(d){
-						return d.name;
-					})
-				svg.append("g")
-					 .classed("date",true)
-					 .append("text")
-					 .attr("x",475)
-					 .attr("y",30)
-					 .text("Day:"+data[day].day)
-//		// labels
-//		//svg.selectAll("text")
-//			//.data(data)
-//			.enter()
-//			.append("text")
-//			.text(function(d){
-//			  return d.name;
-//			})
-//			.attr("x",function(d,i){
-//			  return i*(barwidth+barpadding)+barwidth/2
-//			})
-//			.attr("y",function(d){
-//			  return height- d.grade*20-5
-//			})
-//			.attr("text-anchor","middle")
-//			.style("font-size",15)
-//
-//		//legend
-//		svg.select("g")
-//			.selectAll("rect")
-//			.data(data[day].grades)
-//			.enter()
-//			.append("rect")
-//			.attr("x",chartW+50)
-//			.attr("y",function(d,i){
-//			  return i*(legendH+legendpadding)
-//			})
-//			.attr("width",legendW)
-//			.attr("height",legendH)
-//			.attr("fill",function(d){
-//			  return d.name
-//			})
-//		svg.select("g").selectAll("text")
-//			.data(data)
-//			.enter()
-//			.append("text")
-//			.attr("x",chartW+legendW+65)
-//			.attr("y",function(d,i){
-//			 return i*(legendH+legendpadding)+15
-//			})
-//			.text(function(d){
-//			  return d.name
-//			})
-//
+           var dataP = d3.json("gradedatatime.json");
 
-	 }
+           var drawChart = function(data,day){
 
-	 dataP.then(function(d){
-		  drawChart(d,0)
-		})
+            var svg = d3.select("svg")
+                 .attr("width",width)
+                 .attr("height",height);
+           // rects
+           var plotLand=svg.append("g")
+           .classed("plot",true)
+           .attr("transform","translate("+margin.left+","+margin.top+")");
 
-	</script>
-	</body>
+           var rect = plotLand.selectAll("rect")
+            .data(data[day].grades)
+            .enter()
+            .append("rect")
+            .attr("x",function(d,i){
+              return xScale(i);
+            })
+            .attr("y",function(d){
+              return yScale2(d.grade);
+            })
+            .attr("width",graphwidth/4-4)
+            .attr("height",function(d){
+              return graphheight-yScale2(d.grade);
+            })
+            .attr("fill",function(d){
+              return color(d.name);
+            })
+
+            var legend=svg.append("g")
+                          .classed("legend",true)
+                          .attr("transform","translate("+(width-margin.right)+","+margin.top+")");
+
+            var legendLines=legend.selectAll("g")
+                                  .data(data[day].grades)
+                                  .enter()
+                                  .append("g")
+                                  .classed("legendLine",true)
+                                  .attr("transform",function(d,i){
+                                  return "translate(0,"+(i*20)+")";});
+
+            legendLines.append("rect")
+                       .attr("x",0)
+                       .attr("y",0)
+                       .attr("width",10)
+                       .attr("height",10)
+                       .attr("fill",function(d){return color(d.name);});
+
+            legendLines.append("text")
+                       .attr("x",20)
+                       .attr("y",10)
+                       .text(function(d){ return d.name;});
+
+         var yAxis=d3.axisLeft(yScale2)
+                .ticks(11);
+
+         svg.append("g")
+         .classed("axis",true)
+         .call(yAxis)
+         .attr("transform","translate("+(margin.left-5)+","+margin.top+")");
+           }
+
+           var cg = function(x){
+             var y=document.getElementById("dates").innerText;
+             console.log(y)
+             y=Number(y)+Number(x);
+             console.log(y)
+             var dataP = d3.json("gradedatatime.json");
+             dataP.then(function(d){
+               change(d,y)
+             })
+            }
+            var change = function(data,day){
+            d3.selectAll("rect")
+               .data(data[day-1].grades)
+               .transition()
+               .attr("x",function(d,i){
+                 return xScale(i);
+               })
+               .attr("y",function(d){
+                 return yScale2(d.grade);
+               })
+               .attr("width",graphwidth/4-4)
+               .attr("height",function(d){
+                 return graphheight-yScale2(d.grade);
+               })
+               .attr("fill",function(d){
+                 return color(d.name);
+               })
+
+               var days=document.getElementById("dates");
+               days.innerText=data[day-1].day;
+               document.getElementById("prev").disabled = false;
+               document.getElementById("next").disabled = false;
+               if(day==1)
+               {
+                 document.getElementById("prev").disabled = true;
+               }
+               else if(day==10)
+               {
+                 document.getElementById("next").disabled = true;
+               }}
+
+           dataP.then(function(d){
+             drawChart(d,0)
+           })
+
+
+      </script>
+      <h1>Looking Through Time</h1>
+      <svg width="600" height="500"></svg>
+      <div style="display:inline">Day:</div>
+      <div id="dates" style="display:inline" >
+        1
+      </div>
+      <button onclick="cg(-1)" type="button" id="prev" disabled="true">PREV</button>
+      <button onclick="cg(1)" type="button" id="next">NEXT</button><br>
+   </body>
 </html>
